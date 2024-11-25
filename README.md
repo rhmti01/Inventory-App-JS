@@ -15,12 +15,9 @@ Easily track, update, and manage your inventory with an intuitive UI and dynamic
 
 ---
 
-## 💡 **Pro Tips for the Best Experience**
+## 🌐 Live Demo
 
-- 🗂️ **Keep it Organized:** Use meaningful item names and consistent categories for clarity.  
-- 🛡️ **Regular Backups:** Export your inventory data periodically to avoid unexpected losses.  
-- 🔍 **Feedback Loop:** Test new features thoroughly and let us know if anything can be improved!  
-- 💻 **Extend Functionality:** Feel free to customize or add features—JavaScript makes it easy!  
+Check out the live demo [here](https://inventory-rhmti01-tailwind.netlify.app/)!
 
 ---
 
