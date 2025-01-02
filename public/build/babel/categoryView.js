@@ -34,7 +34,7 @@ var CategoryView = exports["default"] = /*#__PURE__*/function () {
   return _createClass(CategoryView, [{
     key: "setupApp",
     value: function setupApp() {
-      this.instantCtgUpdate();
+      this.instantCtgUpdate(_storage["default"].getCategories());
     }
   }, {
     key: "addNewCategory",
@@ -50,23 +50,42 @@ var CategoryView = exports["default"] = /*#__PURE__*/function () {
         this.ctgTitleInput.value = ' ';
         this.ctgDescInput.value = ' ';
         // save category to local storage
-        var ctgList = _storage["default"].getCategories();
-        ctgList.push(newCategroy);
-        _storage["default"].saveCategories(ctgList);
+        var savedCategories = _storage["default"].getCategories();
+        // edit => ... save
+        // new => ... save
+        var existedItem = savedCategories.find(function (c) {
+          return c.title === newCategroy.title;
+        });
+        if (existedItem) {
+          // edit
+          existedItem.title = newCategroy.title;
+          existedItem.description = newCategroy.description;
+          alert("this category name has been added before so we will update the category description!");
+          return;
+        } else {
+          // new
+          newCategroy.id = new Date().getTime();
+          newCategroy.createdAt = new Date().toISOString();
+          savedCategories.push(newCategroy);
+        }
+        console.log(savedCategories);
+        _storage["default"].saveCategories(savedCategories);
         // instant update html category list from storage
-        this.instantCtgUpdate();
+        this.instantCtgUpdate(savedCategories);
       } else {
         alert("your entered title for category must be at least 2 characters!!!");
       }
     }
   }, {
     key: "instantCtgUpdate",
-    value: function instantCtgUpdate() {
+    value: function instantCtgUpdate(categories) {
       var _this2 = this;
-      var ctgListTitles = _storage["default"].getCategories().map(function (obj) {
+      var ctgListTitles = categories.map(function (obj) {
         return obj.title.trim();
       });
+      console.log(categories);
       // create option for each category
+      this.ctgSelect.innerHTML = " <option selected value=\"none\">- select category -</option>  ";
       ctgListTitles.forEach(function (option) {
         var newOption = document.createElement("option");
         newOption.value = option;

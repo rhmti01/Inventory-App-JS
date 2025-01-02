@@ -19,7 +19,7 @@ export default class CategoryView {
     }
 
     setupApp() {
-        this.instantCtgUpdate()
+        this.instantCtgUpdate(Storage.getCategories())
     }
 
     addNewCategory() {
@@ -34,19 +34,36 @@ export default class CategoryView {
             this.ctgTitleInput.value = ' '
             this.ctgDescInput.value = ' '
             // save category to local storage
-            const ctgList = Storage.getCategories()
-            ctgList.push(newCategroy)
-            Storage.saveCategories(ctgList)
+            const savedCategories = Storage.getCategories();
+            // edit => ... save
+            // new => ... save
+            const existedItem = savedCategories.find((c) => c.title === newCategroy.title);
+            if (existedItem) {
+                // edit
+                existedItem.title = newCategroy.title;
+                existedItem.description = newCategroy.description;
+                alert("this category name has been added before so we will update the category description!")
+                return
+            } else {
+                // new
+                newCategroy.id = new Date().getTime();
+                newCategroy.createdAt = new Date().toISOString();
+                savedCategories.push(newCategroy);
+            }
+            console.log(savedCategories);
+            Storage.saveCategories(savedCategories)
             // instant update html category list from storage
-            this.instantCtgUpdate()
+            this.instantCtgUpdate(savedCategories)
         } else {
             alert("your entered title for category must be at least 2 characters!!!")
         }
     }
 
-    instantCtgUpdate() {
-        const ctgListTitles = Storage.getCategories().map(obj => obj.title.trim())
+    instantCtgUpdate(categories) {
+        const ctgListTitles = categories.map(obj => obj.title.trim())
+        console.log(categories);
         // create option for each category
+        this.ctgSelect.innerHTML = ` <option selected value="none">- select category -</option>  `
         ctgListTitles.forEach(option => {
             const newOption = document.createElement("option")
             newOption.value = option;
